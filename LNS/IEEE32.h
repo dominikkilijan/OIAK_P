@@ -18,6 +18,10 @@ public:
 	{
 		fValue = value;
 	}
+	IEEE32()
+	{
+		fValue = 0;
+	}
 	void printNumber();
 	IEEE32 mul(IEEE32, IEEE32);
 	IEEE32 mulLNS(IEEE32, IEEE32);

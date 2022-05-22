@@ -3,17 +3,31 @@
 
 #include <iostream>
 #include "IEEE32.h"
+#include <bitset>
 
 int main()
 {
-    std::cout << "Hello World!\n";
-
-    IEEE32 num1(3.5f);
+    IEEE32 num1(6.9f);
     num1.printNumber();
 
-    IEEE32 num2(27.3f);
+    IEEE32 num2(1.85f);
     num2.printNumber();
 
+    IEEE32 num3;
+
+    std::cout << "-----------------------------------------------------------------------------\n";
+    std::cout << "Mnozenie\n";
+    num3 = num3.mul(num1, num2);
+    std::cout << "---------------------------\n";
+    num3.printNumber();
+    std::cout << "-----------------------------------------------------------------------------\n";
+
+    std::cout << "-----------------------------------------------------------------------------\n";
+    std::cout << "Dzielenie\n";
+    num3 = num3.div(num1, num2);
+    std::cout << "---------------------------\n";
+    num3.printNumber();
+    std::cout << "-----------------------------------------------------------------------------\n";
 
 }
 

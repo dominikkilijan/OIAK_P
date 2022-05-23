@@ -1,4 +1,2 @@
-﻿  IEEE32.cpp
-D:\Studia\PWR\OIAK P\LNS\LNS\IEEE32.cpp(75,17): warning C4244: "inicjowanie": konwersja z "double" do "float", możliwa utrata danych
-D:\Studia\PWR\OIAK P\LNS\LNS\IEEE32.cpp(148,17): warning C4244: "inicjowanie": konwersja z "double" do "float", możliwa utrata danych
+﻿  LNS.cpp
   LNS.vcxproj -> D:\Studia\PWR\OIAK P\LNS\Debug\LNS.exe

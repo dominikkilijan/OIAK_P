@@ -72,7 +72,7 @@ IEEE32 IEEE32::mulLNS(IEEE32 num1, IEEE32 num2)
     float k1 = log2(mant1); // tutaj mozna pokombinowac jesli zwykla funkcja log2 bedzie zbyt wolna
     float k2 = log2(mant2);
 
-    float mant3 = pow(2, (k1 + k2));
+    float mant3 = powf(2, (k1 + k2));
     std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     if (mant3 > 2)
@@ -145,7 +145,7 @@ IEEE32 IEEE32::divLNS(IEEE32 num1, IEEE32 num2)
     float k1 = log2(mant1); // tutaj mozna pokombinowac jesli zwykla funkcja log2 bedzie zbyt wolna
     float k2 = log2(mant2);
 
-    float mant3 = pow(2, (k1 - k2));
+    float mant3 = powf(2, (k1 - k2));
     std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     if (mant3 < 1)
@@ -211,13 +211,17 @@ void IEEE32::isr()
     if (this->sign == 0)
     {
         // wykladnik
-        this->exponent = ((this->exponent - 127) / -2 + 127);
+        int exp = (int)this->exponent;
+        std::cout << "Exp 1: " << exp << "\n";
+        exp = ((exp - 127) / -2 + 127);
+        std::cout << "Exp 1: " << exp << "\n";
+        this->exponent = exp;
         std::cout << "Wykladnik do pierwiastka: " << this->exponent << "\n";
 
         // mantysa
         float mant1 = ((float)this->mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
         std::cout << "Mantysa do pierwiastka przed pierwiastkiem: " << mant1 << "\n";
-        mant1 = sqrt(mant1);
+        mant1 = powf((sqrt(mant1)), -1);
         std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 
         if (mant1 > 2)

@@ -5,6 +5,15 @@
 #include "IEEE32.h"
 #include <bitset>
 
+#include <iomanip>
+#include <windows.h>
+
+// mierzenie czasu
+long long int read_QPC();
+long long int frequency;
+long long int start;
+long long int elapsed;
+
 int main()
 {
     float number1 = 6.9f;
@@ -20,14 +29,39 @@ int main()
 //-----------------------------------------------------------------------------------------------------------------------------
     std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "Mnozenie\n";
-    num3 = num3.mul(num1, num2);
+
+    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+    start = read_QPC();  // poczatek pomiaru czasu
+    
+    
+    // (int i = 0; i < 100; i++)
+    //{
+        num3 = num3.mul(num1, num2);
+    //}
+
+    elapsed = read_QPC() - start; // koniec pomiaru czasu
+
+    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
     std::cout << "---------------------------\n";
     num3.printNumber();
     std::cout << "-----------------------------------------------------------------------------\n";
 //-----------------------------------------------------------------------------------------------------------------------------
     std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "Mnozenie LNS\n";
+    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+    start = read_QPC();  // poczatek pomiaru czasu
+
+
+    // (int i = 0; i < 100; i++)
+    //{
     num3 = num3.mulLNS(num1, num2);
+    //}
+
+    elapsed = read_QPC() - start; // koniec pomiaru czasu
+
+    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
     std::cout << "---------------------------\n";
     num3.printNumber();
     std::cout << "-----------------------------------------------------------------------------\n";
@@ -77,8 +111,18 @@ int main()
     std::cout << "---------------------------\n";
     num1.printNumber();
     std::cout << "-----------------------------------------------------------------------------\n";
+
+
 }
 
+
+long long int read_QPC()
+{
+    LARGE_INTEGER count;
+
+    QueryPerformanceCounter(&count);
+    return ((long long int)count.QuadPart);
+}
 // Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
 // Debugowanie programu: F5 lub menu Debugowanie > Rozpocznij debugowanie
 

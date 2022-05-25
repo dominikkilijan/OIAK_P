@@ -16,8 +16,9 @@ long long int elapsed;
 
 int main()
 {
-    float number1 = 6.9f;
-    float number2 = 2.0f;
+    float number1 = 3.5f;
+    float number2 = 2.85f;
+    long long int iterations = 10;
     
     IEEE32 num1(number1);
     num1.printNumber();
@@ -33,13 +34,10 @@ int main()
     QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
     start = read_QPC();  // poczatek pomiaru czasu
     
-    
-    // (int i = 0; i < 100; i++)
-    //{
-        num3 = num3.mul(num1, num2);
-    //}
+    num3 = num3.mul(num1, num2);
 
     elapsed = read_QPC() - start; // koniec pomiaru czasu
+    elapsed = elapsed / iterations;
 
     std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
     std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
@@ -52,13 +50,10 @@ int main()
     QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
     start = read_QPC();  // poczatek pomiaru czasu
 
-
-    // (int i = 0; i < 100; i++)
-    //{
-    num3 = num3.mulLNS(num1, num2);
-    //}
+    num3 = num3.mul(num1, num2);
 
     elapsed = read_QPC() - start; // koniec pomiaru czasu
+    elapsed = elapsed / iterations;
 
     std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
     std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
@@ -68,49 +63,68 @@ int main()
 //-----------------------------------------------------------------------------------------------------------------------------
     std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "Dzielenie\n";
+    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+    start = read_QPC();  // poczatek pomiaru czasu
+
     num3 = num3.div(num1, num2);
+
+    elapsed = read_QPC() - start; // koniec pomiaru czasu
+    elapsed = elapsed / iterations;
+
+    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
     std::cout << "---------------------------\n";
     num3.printNumber();
     std::cout << "-----------------------------------------------------------------------------\n";
 //-----------------------------------------------------------------------------------------------------------------------------
     std::cout << "-----------------------------------------------------------------------------\n";
     std::cout << "Dzielenie LNS\n";
+    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+    start = read_QPC();  // poczatek pomiaru czasu
+
     num3 = num3.divLNS(num1, num2);
+
+    elapsed = read_QPC() - start; // koniec pomiaru czasu
+    elapsed = elapsed / iterations;
+
+    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+
     std::cout << "---------------------------\n";
     num3.printNumber();
     std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Pierwiastek\n";
-    num1.fValue = number1;
-    num1.sr();
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Pierwiastek LNS\n";
-    num1.fValue = number1;
-    num1.srLNS();
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Odwrotnosc pierwiastka\n";
-    num1.fValue = number1;
-    num1.isr();
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Odwrotnosc pierwiastka LNS\n";
-    num1.fValue = number1;
-    num1.isrLNS();
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Pierwiastek\n";
+//    num1.fValue = number1;
+//    num1.sr();
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Pierwiastek LNS\n";
+//    num1.fValue = number1;
+//    num1.srLNS();
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Odwrotnosc pierwiastka\n";
+//    num1.fValue = number1;
+//    num1.isr();
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Odwrotnosc pierwiastka LNS\n";
+//    num1.fValue = number1;
+//    num1.isrLNS();
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
 
 
 }

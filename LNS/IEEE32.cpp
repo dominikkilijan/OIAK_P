@@ -1,10 +1,14 @@
 #include "IEEE32.h"
 #include <iostream>
 #include <bitset>
+#include <iomanip>
+#include <windows.h>
+
+
 
 void IEEE32::printNumber()
     {
-        std::cout << "Wartosc liczby: " << this->fValue << "\n";
+        std::cout << "Wartosc liczby: " << std::fixed << std::setprecision(5) << this->fValue << "\n";
         std::cout << "IEEE32: " << this->sign << "   ";
         std::bitset<8> x(this->exponent);
         std::cout << x << "   ";
@@ -31,25 +35,27 @@ IEEE32 IEEE32::mul(IEEE32 num1, IEEE32 num2)
 
     // mantysa
     float mant1 = ((float)num1.mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
-    float mant2 = ((float)num2.mantissa / 8388608) + 1; // w artykule to jest (1+ f)
+    float mant2 = ((float)num2.mantissa / 8388608) + 1; // w artykule to jest (1+f)
 
-    //std::cout << "mantysa liczby 1 po podzieleniu: " << mant1 << "\n";
-    //std::cout << "mantysa liczby 2 po podzieleniu: " << mant2 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 1: " << mant1 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 2: " << mant2 << "\n";
 
     float mant3 = mant1 * mant2;
-    //std::cout << "pomnozone mantysy: " << mant3 << "\n";
-
+    
     if (mant3 > 2)
     {
         mant3 = mant3 / 2;
         result.exponent++;
-        //std::cout << "pomnozone mantysy: " << mant3 << "\n";
+        std::cout << "pomnozone mantysy: " << mant3 << "\n";
     }
+    else std::cout << "pomnozone mantysy: " << mant3 << "\n";
 
-    result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
-    
+    mant3 = ((mant3 - 1) * 8388608);
+    result.mantissa = (int)mant3; // powrot do postaci int np 1110010...0
+
     return result;
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 IEEE32 IEEE32::mulLNS(IEEE32 num1, IEEE32 num2)
 {
@@ -66,26 +72,28 @@ IEEE32 IEEE32::mulLNS(IEEE32 num1, IEEE32 num2)
     float mant1 = ((float)num1.mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
     float mant2 = ((float)num2.mantissa / 8388608) + 1;
 
-    //std::cout << "mantysa liczby 1 po podzieleniu: " << mant1 << "\n";
-    //std::cout << "mantysa liczby 2 po podzieleniu: " << mant2 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 1: " << mant1 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 2: " << mant2 << "\n";
 
-    float k1 = log2(mant1); // tutaj mozna pokombinowac jesli zwykla funkcja log2 bedzie zbyt wolna
-    float k2 = log2(mant2);
+    //float k1 = log2(mant1);
+    //float k2 = log2(mant2);
 
-    float mant3 = powf(2, (k1 + k2));
-    //std::cout << "podzielone mantysy: " << mant3 << "\n";
+    float mant3 = powf(2, (log2(mant1) + log2(mant2)));
 
     if (mant3 > 2)
     {
         mant3 = mant3 / 2;
         result.exponent++;
-        //std::cout << "pomnozone mantysy: " << mant3 << "\n";
+        std::cout << "pomnozone mantysy: " << mant3 << "\n";
     }
+    else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
 
     return result;
+
 }
+
 //======================================================================================================================================================================================
 
 //================================
@@ -106,18 +114,18 @@ IEEE32 IEEE32::div(IEEE32 num1, IEEE32 num2)
     float mant1 = ((float)num1.mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
     float mant2 = ((float)num2.mantissa / 8388608) + 1;
 
-    //std::cout << "mantysa liczby 1 po podzieleniu: " << mant1 << "\n";
-    //std::cout << "mantysa liczby 2 po podzieleniu: " << mant2 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 1: " << mant1 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 2: " << mant2 << "\n";
 
     float mant3 = mant1 / mant2;
-    //std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     if (mant3 < 1)
     {
         mant3 = mant3 * 2;
         result.exponent--;
-        //std::cout << "podzielone mantysy: " << mant3 << "\n";
+        std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
+    else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
 
@@ -139,21 +147,21 @@ IEEE32 IEEE32::divLNS(IEEE32 num1, IEEE32 num2)
     float mant1 = ((float)num1.mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
     float mant2 = ((float)num2.mantissa / 8388608) + 1;
 
-    //std::cout << "mantysa liczby 1 po podzieleniu: " << mant1 << "\n";
-    //std::cout << "mantysa liczby 2 po podzieleniu: " << mant2 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 1: " << mant1 << "\n";
+    //std::cout << "przeksztalcona mantysa liczby 2: " << mant2 << "\n";
 
-    float k1 = log2(mant1); // tutaj mozna pokombinowac jesli zwykla funkcja log2 bedzie zbyt wolna
-    float k2 = log2(mant2);
+    //float k1 = log2(mant1);
+    //float k2 = log2(mant2);
 
-    float mant3 = powf(2, (k1 - k2));
-    //std::cout << "podzielone mantysy: " << mant3 << "\n";
+    float mant3 = powf(2, (log2(mant1) - log2(mant2)));
 
     if (mant3 < 1)
     {
         mant3 = mant3 * 2;
         result.exponent--;
-        //std::cout << "podzielone mantysy: " << mant3 << "\n";
+        std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
+    else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
 
@@ -210,8 +218,8 @@ void IEEE32::srLNS()
         float mant1 = ((float)this->mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
         //std::cout << "Mantysa przed pierwiastkiem: " << mant1 << "\n";
 
-        float k1 = log2(mant1); // tutaj mozna pokombinowac jesli zwykla funkcja log2 bedzie zbyt wolna
-        mant1 = powf(2, (k1 / 2));
+        //float k1 = log2(mant1);
+        mant1 = powf(2, (log2(mant1) / 2));
 
         //std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 
@@ -290,8 +298,8 @@ void IEEE32::isrLNS()
         float mant1 = ((float)this->mantissa / 8388608) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
         //std::cout << "Mantysa przed pierwiastkiem: " << mant1 << "\n";
 
-        float k1 = log2(mant1); // tutaj mozna pokombinowac jesli zwykla funkcja log2 bedzie zbyt wolna
-        mant1 = powf(2, (k1 / -2));
+        //float k1 = log2(mant1);
+        mant1 = powf(2, (log2(mant1) / -2));
 
         //std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 

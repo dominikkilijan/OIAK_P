@@ -20,10 +20,18 @@ int main()
     float number2 = 2.85f;
     long long int iterations = 10;
     
-    IEEE32 num1(number1);
+    //IEEE32 num1(number1);
+    IEEE32 num1;
+    num1.sign = 0;
+    num1.exponent = 254;
+    num1.mantissa = 15110;
     num1.printNumber();
 
-    IEEE32 num2(number2);
+    //IEEE32 num2(number2);
+    IEEE32 num2;
+    num2.sign = 0;
+    num2.exponent = 224;
+    num2.mantissa = 9159;
     num2.printNumber();
 
     IEEE32 num3;

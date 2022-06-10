@@ -7,15 +7,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LNS", "LNS\LNS.vcxproj", "{
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Debug|ARM.ActiveCfg = Debug|Win32
+		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Debug|ARM.Build.0 = Debug|Win32
 		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Debug|x64.ActiveCfg = Debug|x64
 		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Debug|x64.Build.0 = Debug|x64
 		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Debug|x86.ActiveCfg = Debug|Win32
+		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Release|ARM.ActiveCfg = Release|ARM
+		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Release|ARM.Build.0 = Release|ARM
 		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Release|x64.ActiveCfg = Release|x64
 		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Release|x64.Build.0 = Release|x64
 		{A97D0BE8-E584-49B6-8338-1B9858F2EADE}.Release|x86.ActiveCfg = Release|Win32

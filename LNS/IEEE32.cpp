@@ -44,10 +44,10 @@ IEEE32 IEEE32::mul(IEEE32 num1, IEEE32 num2)
         result.exponent++;
         std::cout << "pomnozone mantysy: " << mant3 << "\n";
     }
-    else std::cout << "pomnozone mantysy: " << mant3 << "\n";
+    //else std::cout << "pomnozone mantysy: " << mant3 << "\n";
 
     mant3 = ((mant3 - 1) * 8388608);
-    result.mantissa = (int)mant3; // powrot do postaci int np 1110010...0
+    result.mantissa = (int)ceil(mant3); // powrot do postaci int np 1110010...0
 
     return result;
 }
@@ -74,9 +74,9 @@ IEEE32 IEEE32::mulLNS(IEEE32 num1, IEEE32 num2)
     {
         mant3 = mant3 / 2;
         result.exponent++;
-        std::cout << "pomnozone mantysy: " << mant3 << "\n";
+        //std::cout << "pomnozone mantysy: " << mant3 << "\n";
     }
-    else std::cout << "podzielone mantysy: " << mant3 << "\n";
+    //else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
 
@@ -112,7 +112,7 @@ IEEE32 IEEE32::div(IEEE32 num1, IEEE32 num2)
         result.exponent--;
         std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
-    else std::cout << "podzielone mantysy: " << mant3 << "\n";
+    //std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
 
@@ -140,9 +140,9 @@ IEEE32 IEEE32::divLNS(IEEE32 num1, IEEE32 num2)
     {
         mant3 = mant3 * 2;
         result.exponent--;
-        std::cout << "podzielone mantysy: " << mant3 << "\n";
+        //std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
-    else std::cout << "podzielone mantysy: " << mant3 << "\n";
+    //else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 8388608); // powrot do postaci int np 1110010...0
 
@@ -175,7 +175,7 @@ void IEEE32::sr()
             this->exponent--;
             std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
         }
-        std::cout << "Mantysa po pierwiastku: " << std::fixed << mant1 << "\n";
+        //std::cout << "Mantysa po pierwiastku: " << std::fixed << mant1 << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 8388608); // powrot do postaci int np 1110010...0
     }
@@ -207,7 +207,7 @@ void IEEE32::srLNS()
             this->exponent--;
         }
 
-        std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
+        //std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 8388608); // powrot do postaci int np 1110010...0
     }
@@ -244,7 +244,7 @@ void IEEE32::isr()
             mant1 = mant1 * 2;
             this->exponent--;
         }
-        std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
+        //std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 8388608); // powrot do postaci int np 1110010...0
     }
@@ -275,7 +275,7 @@ void IEEE32::isrLNS()
             mant1 = mant1 * 2;
             this->exponent--;
         }
-        std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
+        //std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 8388608); // powrot do postaci int np 1110010...0
     }

@@ -12,14 +12,20 @@ public:
 		};
 
 	IEEE16()
-	//IEEE16(IEEE32 initNumber)
 	{
-		//this->sign = initNumber.sign;
-		//this->exponent = initNumber.exponent - 112;
-		//this->mantissa = initNumber.mantissa / 8192;
 		this->sign = 0;
 		this->exponent = 0;
 		this->mantissa = 0;
+	}
+	IEEE16(IEEE32 initNumber)
+	{
+		this->setValue(initNumber);
+	}
+	void setValue(IEEE32 setNumber)
+	{
+		this->sign = setNumber.sign;
+		this->exponent = setNumber.exponent - 112;
+		this->mantissa = setNumber.mantissa / 8192;
 	}
 	void printNumber();
 	IEEE16 mul(IEEE16, IEEE16);

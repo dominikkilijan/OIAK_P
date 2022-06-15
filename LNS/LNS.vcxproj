@@ -141,10 +141,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IEEE16.cpp" />
     <ClCompile Include="IEEE32.cpp" />
     <ClCompile Include="LNS.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IEEE16.h" />
     <ClInclude Include="IEEE32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

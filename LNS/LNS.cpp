@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include "IEEE16.h"
 #include "IEEE32.h"
 #include <bitset>
 
@@ -20,164 +21,171 @@ int main()
     float number2 = 25.741f;
     long long int iterations = 10;
     
+    IEEE16 num16;
+    num16.sign = 0;
+    num16.exponent = 18;
+    num16.mantissa = 487;
+    num16.printNumber();
+
+
     IEEE32 num1(number1);
-    //num1.sign = 0;
-    //num1.exponent = 254;
-    //num1.mantissa = 15110;
+    num1.sign = 0;
+    num1.exponent = 30;
+    num1.mantissa = 487;
     num1.printNumber();
 
     IEEE32 num2(number2);
     //num2.sign = 0;
     //num2.exponent = 224;
     //num2.mantissa = 9159;
-    num2.printNumber();
+    //num2.printNumber();
 
     IEEE32 num3;
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Mnozenie\n";
-
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-    
-    num3 = num3.mul(num1, num2);
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-    std::cout << "---------------------------\n";
-    num3.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Mnozenie LNS\n";
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num3 = num3.mulLNS(num1, num2);
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-    std::cout << "---------------------------\n";
-    num3.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-
-
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Dzielenie\n";
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num3 = num3.div(num1, num2);
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-    std::cout << "---------------------------\n";
-    num3.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Dzielenie LNS\n";
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num3 = num3.divLNS(num1, num2);
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-
-    std::cout << "---------------------------\n";
-    num3.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-
-
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Pierwiastek\n";
-    num1.fValue = number1;
-
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num1.sr();
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Pierwiastek LNS\n";
-    num1.fValue = number1;
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num1.srLNS();
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-
-
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Odwrotnosc pierwiastka\n";
-    num1.fValue = number1;
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num1.isr();
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
-//-----------------------------------------------------------------------------------------------------------------------------
-    std::cout << "-----------------------------------------------------------------------------\n";
-    std::cout << "Odwrotnosc pierwiastka LNS\n";
-    num1.fValue = number1;
-    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-    start = read_QPC();  // poczatek pomiaru czasu
-
-    num1.isrLNS();
-
-    elapsed = read_QPC() - start; // koniec pomiaru czasu
-    elapsed = elapsed / iterations;
-
-    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
-    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
-
-    std::cout << "---------------------------\n";
-    num1.printNumber();
-    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Mnozenie\n";
+//
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//    
+//    num3 = num3.mul(num1, num2);
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "---------------------------\n";
+//    num3.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Mnozenie LNS\n";
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num3 = num3.mulLNS(num1, num2);
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "---------------------------\n";
+//    num3.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//
+//
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Dzielenie\n";
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num3 = num3.div(num1, num2);
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "---------------------------\n";
+//    num3.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Dzielenie LNS\n";
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num3 = num3.divLNS(num1, num2);
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//
+//    std::cout << "---------------------------\n";
+//    num3.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//
+//
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Pierwiastek\n";
+//    num1.fValue = number1;
+//
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num1.sr();
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Pierwiastek LNS\n";
+//    num1.fValue = number1;
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num1.srLNS();
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//
+//
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Odwrotnosc pierwiastka\n";
+//    num1.fValue = number1;
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num1.isr();
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
+////-----------------------------------------------------------------------------------------------------------------------------
+//    std::cout << "-----------------------------------------------------------------------------\n";
+//    std::cout << "Odwrotnosc pierwiastka LNS\n";
+//    num1.fValue = number1;
+//    QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+//    start = read_QPC();  // poczatek pomiaru czasu
+//
+//    num1.isrLNS();
+//
+//    elapsed = read_QPC() - start; // koniec pomiaru czasu
+//    elapsed = elapsed / iterations;
+//
+//    std::cout << "Time [us] = " << std::fixed << std::setprecision(0) << (1000000.0 * elapsed) / frequency << "\n";
+//    std::cout << "Time [ns] = " << std::setprecision(0) << (1000000000.0 * elapsed) / frequency << "\n";
+//
+//    std::cout << "---------------------------\n";
+//    num1.printNumber();
+//    std::cout << "-----------------------------------------------------------------------------\n";
 
 
 }

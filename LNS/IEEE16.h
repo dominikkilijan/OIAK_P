@@ -41,6 +41,8 @@ public:
 	void isr();
 	void isrLNS();
 
+	unsigned int logConverter(unsigned int);
+
 };
 
 

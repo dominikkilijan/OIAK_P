@@ -20,6 +20,83 @@ void IEEE16::printNumber()
     std::bitset<10> y(this->mantissa);
     std::cout << y << "\n";
 }
+
+unsigned int IEEE16::logConverter(unsigned int mantissaToLog)
+{
+    unsigned int mant = mantissaToLog;
+    int a[2];
+    int b;
+
+    if (mant >= 0 && mant <= 95)
+    {
+        a[0] = 1;
+        a[1] = -3;
+        b = 13;
+    }
+    else if (mant >= 96 && mant <= 191)
+    {
+        a[0] = 2;
+        a[1] = 6;
+        b = 98;
+    }
+    else if (mant >= 192 && mant <= 303)
+    {
+        a[0] = 3;
+        a[1] = 5;
+        b = 269;
+    }
+    else if (mant >= 304 && mant <= 415)
+    {
+        a[0] = 4;
+        a[1] = 0;
+        b = 501;
+    }
+    else if (mant >= 416 && mant <= 569)
+    {
+        a[0] = -6;
+        a[1] = 0;
+        b = 763;
+    }
+    else if (mant >= 560 && mant <= 703)
+    {
+        a[0] = -3;
+        a[1] = 6;
+        b = 1178;
+    }
+    else if (mant >= 704 && mant <= 847)
+    {
+        a[0] = -2;
+        a[1] = 4;
+        b = 1622;
+    }
+    else if (mant >= 848 && mant <= 1023)
+    {
+        a[0] = -2;
+        a[1] = 0;
+        b = 2055;
+    }
+
+    mant = mant << 3;
+    mant = mant + b;
+    for (int i = 0; i < 2; i++)
+    {
+        if (a[i] > 0)
+        {
+            unsigned int mant2 = mantissaToLog;
+            mant2 = mant2 >> a[i];
+            mant += mant2;
+        }
+        else if (a[i] < 0)
+        {
+            unsigned int mant2 = mantissaToLog;
+            mant2 = mant2 >> abs(a[i]);
+            mant -= mant2;
+        }
+    }
+    mant = mant >> 3;
+    std::cout << "Mantysa po logConverter: " << mant << "\n";
+    return mant;
+}
 //=======================================================================================================================================================================
 // operacje matematyczne
 //=======================================================================================================================================================================
@@ -61,6 +138,8 @@ IEEE16 IEEE16::mul(IEEE16 num1, IEEE16 num2)
 IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
 {
     IEEE16 result(0);
+    IEEE16 result1(0);
+    IEEE16 result2(0);
     std::cout << "LNS \n";
     // znak
     if (num1.sign != num2.sign) result.sign = 1;
@@ -72,6 +151,9 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
     // mantysa
     float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
     float mant2 = ((float)num2.mantissa / 1024) + 1;
+
+    result1.mantissa = logConverter(num1.mantissa);
+    result2.mantissa = logConverter(num2.mantissa);
 
     float mant3 = powf(2, (log2(mant1) + log2(mant2)));
 
@@ -286,3 +368,4 @@ void IEEE16::isrLNS()
     }
     else std::cout << "Ujemna liczba" << "\n";
 }
+

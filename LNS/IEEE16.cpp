@@ -315,26 +315,30 @@ IEEE16 IEEE16::divLNS(IEEE16 num1, IEEE16 num2)
     std::cout << "result2.mantissa: " << result2.mantissa << "\n";
 
 
-    //float mant11 = ((float)result1.mantissa / 1024) + 1;
-    //float mant22 = ((float)result2.mantissa / 1024) + 1;
-    //float mant3 = powf(2, mant11 - mant22);
-    float mant3;
+    float mant11 = ((float)result1.mantissa / 1024) + 1;
+    float mant22 = ((float)result2.mantissa / 1024) + 1;
+    float mant3 = powf(2, mant11 - mant22);
+    /*float mant3;
     if (result1.mantissa < result2.mantissa)
     {
-    mant3 = ((((float)antilogConverter(result2.mantissa - result1.mantissa) / 1024.0f) + 1.0f));
+        mant3 = (1.0f / (((float)antilogConverter(result2.mantissa - result1.mantissa) / 1024.0f) + 1.0f));
     }
-    else mant3 = (((float)antilogConverter(result2.mantissa - result1.mantissa) / 1024.0f) + 1.0f);
+    else mant3 = (((float)antilogConverter(result1.mantissa - result2.mantissa) / 1024.0f) + 1.0f);*/
     std::cout << "mant3: " << mant3 << "\n";
-    //--------------------------------------------------------
-    //float mant3 = powf(2, (log2(mant1) - log2(mant2)));
 
     if (mant3 > 2)
     {
-        mant3 -= 1;
-        //result.exponent--;
-        std::cout << "podzielone mantysy: " << mant3 << "\n";
+        mant3 /= 2;
+        result.exponent--;
+        //std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
-    else std::cout << "podzielone mantysy: " << mant3 << "\n";
+    if (mant3 < 1)
+    {
+        mant3 *= 2;
+        result.exponent--;
+        //std::cout << "podzielone mantysy: " << mant3 << "\n";
+    }
+    std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
 

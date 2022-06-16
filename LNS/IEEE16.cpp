@@ -24,8 +24,8 @@ void IEEE16::printNumber()
 unsigned int IEEE16::logConverter(unsigned int mantissaToLog)
 {
     unsigned int mant = mantissaToLog;
-    int a[2];
-    int b;
+    int a[] = {0,0};
+    int b = 0;
 
     if (mant >= 0 && mant <= 95)
     {
@@ -82,19 +82,96 @@ unsigned int IEEE16::logConverter(unsigned int mantissaToLog)
     {
         if (a[i] > 0)
         {
-            unsigned int mant2 = mantissaToLog;
+            unsigned int mant2 = mantissaToLog << 3;
             mant2 = mant2 >> a[i];
             mant += mant2;
         }
         else if (a[i] < 0)
         {
-            unsigned int mant2 = mantissaToLog;
+            unsigned int mant2 = mantissaToLog << 3;
             mant2 = mant2 >> abs(a[i]);
             mant -= mant2;
         }
     }
     mant = mant >> 3;
     std::cout << "Mantysa po logConverter: " << mant << "\n";
+    return mant;
+}
+unsigned int IEEE16::antilogConverter(unsigned int mantissaToLog)
+{
+    unsigned int mant = mantissaToLog;
+    int a[] = {0,0};
+    int b = 0;
+
+    if (mant >= 0 && mant <= 159)
+    {
+        a[0] = -2;
+        a[1] = -6;
+        b = 8188;
+    }
+    else if (mant >= 160 && mant <= 287)
+    {
+        a[0] = -2;
+        a[1] = 4;
+        b = 8085;
+    }
+    else if (mant >= 288 && mant <= 431)
+    {
+        a[0] = -3;
+        a[1] = 6;
+        b = 7898;
+    }
+    else if (mant >= 432 && mant <= 575)
+    {
+        a[0] = -5;
+        a[1] = 0;
+        b = 7625;
+    }
+    else if (mant >= 576 && mant <= 703)
+    {
+        a[0] = 4;
+        a[1] = 6;
+        b = 7123;
+    }
+    else if (mant >= 704 && mant <= 815)
+    {
+        a[0] = 3;
+        a[1] = 5;
+        b = 6680;
+    }
+    else if (mant >= 816 && mant <= 943)
+    {
+        a[0] = 2;
+        a[1] = 6;
+        b = 5964;
+    }
+    else if (mant >= 944 && mant <= 1023)
+    {
+        a[0] = 1;
+        a[1] = -3;
+        b = 5131;
+    }
+
+    mant = mant << 3;
+    mant = mant + b;
+    for (int i = 0; i < 2; i++)
+    {
+        if (a[i] > 0)
+        {
+            unsigned int mant2 = mantissaToLog << 3;
+            mant2 = mant2 >> a[i];
+            mant += mant2;
+        }
+        else if (a[i] < 0)
+        {
+            unsigned int mant2 = mantissaToLog << 3;
+            mant2 = mant2 >> abs(a[i]);
+            mant2 = ~mant2;
+            mant += mant2;
+        }
+    }
+    mant = mant >> 3;
+    std::cout << "Mantysa po antilogConverter: " << mant << "\n";
     return mant;
 }
 //=======================================================================================================================================================================
@@ -151,11 +228,16 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
     // mantysa
     float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
     float mant2 = ((float)num2.mantissa / 1024) + 1;
-
+    //--------------------------------------------------------
     result1.mantissa = logConverter(num1.mantissa);
     result2.mantissa = logConverter(num2.mantissa);
 
-    float mant3 = powf(2, (log2(mant1) + log2(mant2)));
+    float mant11 = ((float)result1.mantissa / 1024) + 1;
+    float mant22 = ((float)result2.mantissa / 1024) + 1;
+    float mant3 = powf(2, mant11 + mant22);
+
+    //--------------------------------------------------------
+    //float mant3 = powf(2, (log2(mant1) + log2(mant2)));
 
     if (mant3 > 2)
     {
@@ -165,8 +247,8 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
     }
     //else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
-    result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
-
+    //result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
+    result.mantissa = (int)((mant3 - 1) * 1024);
     return result;
 
 }
@@ -221,7 +303,19 @@ IEEE16 IEEE16::divLNS(IEEE16 num1, IEEE16 num2)
     float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
     float mant2 = ((float)num2.mantissa / 1024) + 1;
 
-    float mant3 = powf(2, (log2(mant1) - log2(mant2)));
+
+    //--------------------------------------------------------
+    IEEE16 result1(0);
+    IEEE16 result2(0);
+    result1.mantissa = logConverter(num1.mantissa);
+    result2.mantissa = logConverter(num2.mantissa);
+
+    float mant11 = ((float)result1.mantissa / 1024) + 1;
+    float mant22 = ((float)result2.mantissa / 1024) + 1;
+    float mant3 = powf(2, mant11 - mant22);
+
+    //--------------------------------------------------------
+    //float mant3 = powf(2, (log2(mant1) - log2(mant2)));
 
     if (mant3 < 1)
     {
@@ -279,9 +373,13 @@ void IEEE16::srLNS()
         this->exponent = (this->exponent - 15) / 2 + 15;
 
         // mantysa
-        float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+        //float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
 
-        mant1 = powf(2, (log2(mant1) / 2));
+        //mant1 = powf(2, (log2(mant1) / 2));
+        IEEE16 result1(0);
+        result1.mantissa = logConverter(this->mantissa);
+        float mant1 = ((float)result1.mantissa / 1024) + 1;
+        mant1 = powf(2, mant1 / 2);
 
         if (mant1 > 2)
         {

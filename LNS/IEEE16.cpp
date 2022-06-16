@@ -226,8 +226,8 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
     result.exponent = (num1.exponent - 15) + num2.exponent;
 
     // mantysa
-    float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
-    float mant2 = ((float)num2.mantissa / 1024) + 1;
+    //float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+    //float mant2 = ((float)num2.mantissa / 1024) + 1;
     //--------------------------------------------------------
     result1.mantissa = logConverter(num1.mantissa);
     result2.mantissa = logConverter(num2.mantissa);
@@ -235,6 +235,7 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
     float mant11 = ((float)result1.mantissa / 1024) + 1;
     float mant22 = ((float)result2.mantissa / 1024) + 1;
     float mant3 = powf(2, mant11 + mant22);
+    //float mant3 = (((antilogConverter(result1.mantissa + result2.mantissa) / 1024.0f) + 1.0f));
 
     //--------------------------------------------------------
     //float mant3 = powf(2, (log2(mant1) + log2(mant2)));
@@ -249,6 +250,7 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
 
     //result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
     result.mantissa = (int)((mant3 - 1) * 1024);
+
     return result;
 
 }
@@ -281,7 +283,7 @@ IEEE16 IEEE16::div(IEEE16 num1, IEEE16 num2)
         result.exponent--;
         std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
-    //std::cout << "podzielone mantysy: " << mant3 << "\n";
+    std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
 
@@ -300,8 +302,8 @@ IEEE16 IEEE16::divLNS(IEEE16 num1, IEEE16 num2)
     result.exponent = (num1.exponent + 15) - num2.exponent;
 
     // mantysa
-    float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
-    float mant2 = ((float)num2.mantissa / 1024) + 1;
+    //float mant1 = ((float)num1.mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+    //float mant2 = ((float)num2.mantissa / 1024) + 1;
 
 
     //--------------------------------------------------------
@@ -309,21 +311,30 @@ IEEE16 IEEE16::divLNS(IEEE16 num1, IEEE16 num2)
     IEEE16 result2(0);
     result1.mantissa = logConverter(num1.mantissa);
     result2.mantissa = logConverter(num2.mantissa);
+    std::cout << "result1.mantissa: " << result1.mantissa << "\n";
+    std::cout << "result2.mantissa: " << result2.mantissa << "\n";
 
-    float mant11 = ((float)result1.mantissa / 1024) + 1;
-    float mant22 = ((float)result2.mantissa / 1024) + 1;
-    float mant3 = powf(2, mant11 - mant22);
 
+    //float mant11 = ((float)result1.mantissa / 1024) + 1;
+    //float mant22 = ((float)result2.mantissa / 1024) + 1;
+    //float mant3 = powf(2, mant11 - mant22);
+    float mant3;
+    if (result1.mantissa < result2.mantissa)
+    {
+    mant3 = ((((float)antilogConverter(result2.mantissa - result1.mantissa) / 1024.0f) + 1.0f));
+    }
+    else mant3 = (((float)antilogConverter(result2.mantissa - result1.mantissa) / 1024.0f) + 1.0f);
+    std::cout << "mant3: " << mant3 << "\n";
     //--------------------------------------------------------
     //float mant3 = powf(2, (log2(mant1) - log2(mant2)));
 
-    if (mant3 < 1)
+    if (mant3 > 2)
     {
-        mant3 = mant3 * 2;
-        result.exponent--;
-        //std::cout << "podzielone mantysy: " << mant3 << "\n";
+        mant3 -= 1;
+        //result.exponent--;
+        std::cout << "podzielone mantysy: " << mant3 << "\n";
     }
-    //else std::cout << "podzielone mantysy: " << mant3 << "\n";
+    else std::cout << "podzielone mantysy: " << mant3 << "\n";
 
     result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
 
@@ -373,26 +384,18 @@ void IEEE16::srLNS()
         this->exponent = (this->exponent - 15) / 2 + 15;
 
         // mantysa
-        //float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+        //float mant11 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
 
-        //mant1 = powf(2, (log2(mant1) / 2));
         IEEE16 result1(0);
         result1.mantissa = logConverter(this->mantissa);
-        float mant1 = ((float)result1.mantissa / 1024) + 1;
-        mant1 = powf(2, mant1 / 2);
+        float mant1 = ((float)antilogConverter(result1.mantissa / 2) / 1024) + 1;
 
         if (mant1 > 2)
         {
-            mant1 = mant1 / 2;
-            this->exponent++;
-        }
-        if (mant1 < 1)
-        {
-            mant1 = mant1 * 2;
-            this->exponent--;
+            mant1 = mant1 - 1;
         }
 
-        std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
+        std::cout << "2 Mantysa po pierwiastku: " << mant1 << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 1024); // powrot do postaci int np 1110010...0
     }
@@ -446,7 +449,18 @@ void IEEE16::isrLNS()
         this->exponent = exp;
 
         // mantysa
-        float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+
+        IEEE16 result1(0);
+        result1.mantissa = logConverter(this->mantissa);
+        //float mant1 = ((float)antilogConverter(result1.mantissa / -2.0f) / 1024) + 1.0f;
+        float mant1=0;
+        if (mant1 > 2)
+        {
+            mant1 = mant1 - 1;
+        }
+
+        std::cout << "2 Mantysa po pierwiastku: " << mant1 << "\n";
+        /*float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
 
         mant1 = powf(2, (log2(mant1) / -2));
 
@@ -459,7 +473,7 @@ void IEEE16::isrLNS()
         {
             mant1 = mant1 * 2;
             this->exponent--;
-        }
+        }*/
         std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 1024); // powrot do postaci int np 1110010...0
@@ -467,3 +481,7 @@ void IEEE16::isrLNS()
     else std::cout << "Ujemna liczba" << "\n";
 }
 
+void IEEE16::isrLNSLazy()
+{
+
+}

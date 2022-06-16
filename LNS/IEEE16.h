@@ -40,6 +40,8 @@ public:
 
 	void isr();
 	void isrLNS();
+	void isrLNSLazy();
+
 
 	unsigned int logConverter(unsigned int);
 	unsigned int antilogConverter(unsigned int);

@@ -40,7 +40,7 @@ public:
 
 	void isr();
 	void isrLNS();
-	void isrLNSLazy();
+	void isrLNSIdeal();
 
 
 	unsigned int logConverter(unsigned int);

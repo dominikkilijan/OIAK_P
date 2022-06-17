@@ -27,6 +27,15 @@ public:
 		this->exponent = setNumber.exponent - 112;
 		this->mantissa = setNumber.mantissa / 8192;
 	}
+	float toFloat()
+	{
+		IEEE32 toFloatNumber;
+		toFloatNumber.sign = this->sign;
+		toFloatNumber.exponent = this->exponent + 112;
+		toFloatNumber.mantissa = this->mantissa * 8192;
+
+		return toFloatNumber.fValue;
+	}
 	void printNumber();
 	IEEE16 mul(IEEE16, IEEE16);
 	IEEE16 mulLNS(IEEE16, IEEE16);

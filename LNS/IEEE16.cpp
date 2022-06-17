@@ -234,18 +234,21 @@ IEEE16 IEEE16::mulLNS(IEEE16 num1, IEEE16 num2)
 
     float mant11 = ((float)result1.mantissa / 1024) + 1;
     float mant22 = ((float)result2.mantissa / 1024) + 1;
-    //float mant3 = powf(2, mant11 + mant22);
-    float mant3 = (((float)antilogConverter(result1.mantissa + result2.mantissa) / 1024.0f) + 1.0f);
+    std::cout << "mant11: " << mant11 << "\n";
+    std::cout << "mant11: " << mant22 << "\n";
+    
+    float mant3 = powf(2, mant11 + mant22);
+    //float mant3 = (((float)antilogConverter(result1.mantissa + result2.mantissa) / 1024.0f) + 1.0f);
     std::cout << "mant3: " << mant3 << "\n";
 
     //--------------------------------------------------------
     //float mant3 = powf(2, (log2(mant1) + log2(mant2)));
-
-    if (mant3 > 2)
+    if (mant3 > 2) result.exponent++;
+    while (mant3 > 2)
     {
         mant3 /= 2;
-        result.exponent++;
     }
+
     std::cout << "mant3: " << mant3 << "\n";
 
     //result.mantissa = (int)((mant3 - 1) * 1024); // powrot do postaci int np 1110010...0
@@ -481,7 +484,7 @@ void IEEE16::isrLNS()
         if (mant1 < 1)
         {
             mant1 += 1;
-            this->exponent--;
+            this->exponent++;
         }
         std::cout << "2 Mantysa po pierwiastku: " << mant1 << "\n";
         /*float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
@@ -507,5 +510,31 @@ void IEEE16::isrLNS()
 
 void IEEE16::isrLNSIdeal()
 {
+    if (this->sign == 0)
+    {
+        // wykladnik
+        int exp = (int)this->exponent;
+        exp = ((exp - 15) / -2 + 15);
+        this->exponent = exp;
 
+        // mantysa
+        float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+
+        mant1 = powf(2, (log2(mant1) / -2));
+
+        if (mant1 > 2)
+        {
+            mant1 = mant1 / 2;
+            this->exponent++;
+        }
+        if (mant1 < 1)
+        {
+            mant1 = mant1 * 2;
+            this->exponent--;
+        }
+        //std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
+
+        this->mantissa = (int)((mant1 - 1) * 1024); // powrot do postaci int np 1110010...
+    }
+    else std::cout << "Ujemna liczba" << "\n";
 }

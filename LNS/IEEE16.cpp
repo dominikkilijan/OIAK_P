@@ -100,6 +100,7 @@ unsigned int IEEE16::logConverter(unsigned int mantissaToLog)
 unsigned int IEEE16::antilogConverter(unsigned int mantissaToLog)
 {
     unsigned int mant = mantissaToLog;
+    std::cout << "Poczatkowa mantysa: " << mant << "\n";
     int a[] = {0,0};
     int b = 0;
 
@@ -151,27 +152,34 @@ unsigned int IEEE16::antilogConverter(unsigned int mantissaToLog)
         a[1] = -3;
         b = 5131;
     }
-
+    std::cout << "b = " << b << "\n";
     mant = mant << 3;
+    std::cout << "mant po przesunieciu = " << mant << "\n";
     mant = mant + b;
+    std::cout << "mant plus b = " << mant << "\n";
     for (int i = 0; i < 2; i++)
     {
+        std::cout << "a[i] = " << a[i] << "\n";
         if (a[i] > 0)
         {
             unsigned int mant2 = mantissaToLog << 3;
             mant2 = mant2 >> a[i];
+            std::cout << "mant2 po przesunieciu = " << mant2 << "\n";
             mant += mant2;
+            std::cout << "mant po dodaniu mant2 = " << mant << "\n";
         }
         else if (a[i] < 0)
         {
             unsigned int mant2 = mantissaToLog << 3;
             mant2 = mant2 >> abs(a[i]);
             mant2 = ~mant2;
+            std::cout << "mant2 po przesunieciu = " << mant2 << "\n";
             mant += mant2;
+            std::cout << "mant po dodaniu mant2 = " << mant << "\n";
         }
     }
-    mant = mant >> 3;
     mant & 8191;
+    mant = mant >> 3;
     std::cout << "Mantysa po antilogConverter: " << (mant) << "\n";
     return mant;
 }
@@ -438,7 +446,7 @@ void IEEE16::isrLNS()
         std::cout << "Exponent = " << exp << "\n";
 
         // mantysa
-        float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+        /*float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
         std::cout << "Mantysa: " << mant1 << "\n";
         
         float k1 = logConverter((float)this->mantissa);// / 1024 + 1.0f;
@@ -449,8 +457,12 @@ void IEEE16::isrLNS()
         std::cout << "Mantysa po 2^log2: " << mant1 << "\n";
         mant1 *= mulMant;
         mant1 *= mulMant;
-        std::cout << "Mantysa mulMant: " << mant1 << "\n";
-
+        std::cout << "Mantysa mulMant: " << mant1 << "\n";*/
+        IEEE16 result1(0);
+        result1.mantissa = logConverter(this->mantissa);
+        long k1 = (long)result1.mantissa / -2;
+        float mant1 = ((float)antilogConverter(k1) / 1024) + 1.0f;
+        mant1 *= mulMant;
         if (mant1 > 2)
         {
             mant1 = mant1 / 2;

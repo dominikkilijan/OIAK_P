@@ -16,7 +16,7 @@ long long int elapsed;
 
 int main()
 {
-    float number1 = 2137.42f;
+    float number1 = 969.81f;
     float number2 = 69.81f;
     long long int iterations = 1;
    

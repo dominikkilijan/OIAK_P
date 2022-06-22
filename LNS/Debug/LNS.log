@@ -1,2 +1,5 @@
-﻿  LNS.cpp
+﻿  IEEE16.cpp
+D:\Studia\PWR\OIAK P\LNS\LNS\IEEE16.cpp(358,27): warning C4244: "=": konwersja z "double" do "float", możliwa utrata danych
+D:\Studia\PWR\OIAK P\LNS\LNS\IEEE16.cpp(394,27): warning C4244: "=": konwersja z "double" do "float", możliwa utrata danych
+D:\Studia\PWR\OIAK P\LNS\LNS\IEEE16.cpp(432,27): warning C4244: "=": konwersja z "double" do "float", możliwa utrata danych
   LNS.vcxproj -> D:\Studia\PWR\OIAK P\LNS\Debug\LNS.exe

@@ -171,7 +171,8 @@ unsigned int IEEE16::antilogConverter(unsigned int mantissaToLog)
         }
     }
     mant = mant >> 3;
-    std::cout << "Mantysa po antilogConverter: " << mant << "\n";
+    mant & 8191;
+    std::cout << "Mantysa po antilogConverter: " << (mant) << "\n";
     return mant;
 }
 //=======================================================================================================================================================================
@@ -432,35 +433,36 @@ void IEEE16::isrLNS()
             mulMant = sqrt(2);
             exp -= 1;
         }
+        std::cout << "mulMant: " << mulMant << "\n";
+        this->exponent = (int)exp + 15;
         std::cout << "Exponent = " << exp << "\n";
 
-        std::cout << "mulMant = " << mulMant << "\n";
-        this->exponent = (int)exp + 15;
-        std::cout << "Exponent = " << this->exponent << "\n";
         // mantysa
-
-        IEEE16 result1(0);
-        result1.mantissa = logConverter(this->mantissa);
-        float k1 = (float)result1.mantissa / 2;
-        std::cout << "k1 = " << k1 << "\n";
-        float mant1 = (antilogConverter(k1) / 1024) + 1.0f;
-        std::cout << "Mantysa po antilog = " << mant1 << "\n";
-        mant1 = powf(mant1, -1);
-        std::cout << "Mantysa odwrotnosc = " << mant1 << "\n";
+        float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
+        std::cout << "Mantysa: " << mant1 << "\n";
+        
+        float k1 = logConverter((float)this->mantissa);// / 1024 + 1.0f;
+        std::cout << "k1: " << k1 << "\n";
+        k1 = k1 / 1024 + 1;
+        std::cout << "k1: " << k1 << "\n";
+        mant1 = powf(2, k1 / -2);
+        std::cout << "Mantysa po 2^log2: " << mant1 << "\n";
         mant1 *= mulMant;
-        std::cout << "Mantysa po mnozeniu razy = " << mant1 << "\n";
+        mant1 *= mulMant;
+        std::cout << "Mantysa mulMant: " << mant1 << "\n";
+
         if (mant1 > 2)
         {
-            mant1 -= 1;
-            this->exponent--;
+            mant1 = mant1 / 2;
+            this->exponent++;
         }
         if (mant1 < 1)
         {
-            mant1 += 1;
-            this->exponent++;
+            mant1 = mant1 * 2;
+            this->exponent--;
         }
 
-        this->mantissa = (int)((mant1 - 1) * 1024); // powrot do postaci int np 1110010...0
+        this->mantissa = (int)((mant1 - 1) * 1024); // powrot do postaci int np 1110010...
     }
     else std::cout << "Ujemna liczba" << "\n";
 }
@@ -469,15 +471,27 @@ void IEEE16::isrLNSIdeal()
 {
     if (this->sign == 0)
     {
+        float mulMant = 1;
         // wykladnik
-        int exp = (int)this->exponent;
-        exp = ((exp - 15) / -2 + 15);
-        this->exponent = exp;
+        float exp = (float)this->exponent;
+        exp = ((exp - 15) / -2);
+
+        if (exp - (int)exp != 0)
+        {
+            mulMant = sqrt(2);
+            exp -= 1;
+        }
+        std::cout << "mulMant: " << mulMant << "\n";
+        this->exponent = (int)exp + 15;
+        std::cout << "Exponent = " << exp << "\n";
 
         // mantysa
         float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
-
+        std::cout << "Mantysa: " << mant1 << "\n";
         mant1 = powf(2, (log2(mant1) / -2));
+        std::cout << "Mantysa po 2^log2: " << mant1 << "\n";
+        mant1 *= mulMant;
+        std::cout << "Mantysa mulMant: " << mant1 << "\n";
 
         if (mant1 > 2)
         {

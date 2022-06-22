@@ -16,7 +16,7 @@ long long int elapsed;
 
 int main()
 {
-    float number1 = 146.75f;
+    float number1 = 969.81f;
     float number2 = 122.35f;
     long long int iterations = 1;
    
@@ -217,7 +217,9 @@ int main()
 // Bład bezwzgledny ISR liczby
 //=============================================================================================================================
     float n1 = num1.toFloat();
+    std::cout << n1 << "\n";
     float n2 = num2.toFloat();
+    std::cout << n2 << "\n";
     float AbsoluteError = abs(n1 - n2);
     std::cout << "Blad bezwzgledny liczb: " << AbsoluteError << "\n";
     std::cout << "-----------------------------------------------------------------------------\n";
@@ -385,13 +387,3 @@ long long int read_QPC()
     QueryPerformanceCounter(&count);
     return ((long long int)count.QuadPart);
 }
-// Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
-// Debugowanie programu: F5 lub menu Debugowanie > Rozpocznij debugowanie
-
-// Porady dotyczące rozpoczynania pracy:
-//   1. Użyj okna Eksploratora rozwiązań, aby dodać pliki i zarządzać nimi
-//   2. Użyj okna programu Team Explorer, aby nawiązać połączenie z kontrolą źródła
-//   3. Użyj okna Dane wyjściowe, aby sprawdzić dane wyjściowe kompilacji i inne komunikaty
-//   4. Użyj okna Lista błędów, aby zobaczyć błędy
-//   5. Wybierz pozycję Projekt > Dodaj nowy element, aby utworzyć nowe pliki kodu, lub wybierz pozycję Projekt > Dodaj istniejący element, aby dodać istniejące pliku kodu do projektu
-//   6. Aby w przyszłości ponownie otworzyć ten projekt, przejdź do pozycji Plik > Otwórz > Projekt i wybierz plik sln

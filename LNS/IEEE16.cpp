@@ -1,5 +1,5 @@
 #include "IEEE16.h"
-#include "IEEE16.h"
+#include "IEEE32.h"
 #include <iostream>
 #include <bitset>
 #include <iomanip>
@@ -376,17 +376,30 @@ void IEEE16::isr()
 {
     if (this->sign == 0)
     {
+        float mulMant = 1;
         // wykladnik
-        int exp = (int)this->exponent;
-        exp = ((exp - 15) / -2 + 15);
-        this->exponent = exp;
+        float exp = (float)this->exponent;
+        exp = ((exp - 15) / -2);
+
+        if (exp - (int)exp != 0)
+        {
+            mulMant = sqrt(2);
+            exp -= 1;
+        }
+        
+        std::cout << "mulMant = " << mulMant << "\n";
+        this->exponent = (int)exp + 15;
+        std::cout << "Exponent = " << exp << "\n";
 
         // mantysa
         float mant1 = ((float)this->mantissa / 1024) + 1; // dzielimy przez 2^23 zeby bylo mniejsze niz 1 i inkrementujemy np 110...0 => 0.11 + 1 = 1.11
-
+        std::cout << "Mantysa = " << mant1 << "\n";
         mant1 = (sqrt(mant1));
+        std::cout << "Mantysa po pierwiastku = " << mant1 << "\n";
         mant1 = powf(mant1, -1);
-
+        std::cout << "Mantysa po odwrotnoœci = " << mant1 << "\n";
+        
+        mant1 *= mulMant;
         if (mant1 > 2)
         {
             mant1 = mant1 / 2;
@@ -397,7 +410,8 @@ void IEEE16::isr()
             mant1 = mant1 * 2;
             this->exponent--;
         }
-        std::cout << "Mantysa po pierwiastku: " << mant1 << "\n";
+        std::cout << "Mantysa po ewentualnej poprawie: " << mant1 << "\n";
+        std::cout << "Exponent po ewentualnej poprawie = " << exp << "\n";
 
         this->mantissa = (int)((mant1 - 1) * 1024); // powrot do postaci int np 1110010...0
     }
@@ -408,18 +422,33 @@ void IEEE16::isrLNS()
 {
     if (this->sign == 0)
     {
+        float mulMant = 1;
         // wykladnik
-        int exp = (int)this->exponent;
-        exp = ((exp - 15) / -2 + 15);
-        this->exponent = exp;
+        float exp = (float)this->exponent;
+        exp = ((exp - 15) / -2);
 
+        if (exp - (int)exp != 0)
+        {
+            mulMant = sqrt(2);
+            exp -= 1;
+        }
+        std::cout << "Exponent = " << exp << "\n";
+
+        std::cout << "mulMant = " << mulMant << "\n";
+        this->exponent = (int)exp + 15;
+        std::cout << "Exponent = " << this->exponent << "\n";
         // mantysa
 
         IEEE16 result1(0);
         result1.mantissa = logConverter(this->mantissa);
-        long k1 = (long)result1.mantissa / -2;
-        float mant1 = ((float)antilogConverter(k1) / 1024) + 1.0f;
-
+        float k1 = (float)result1.mantissa / 2;
+        std::cout << "k1 = " << k1 << "\n";
+        float mant1 = (antilogConverter(k1) / 1024) + 1.0f;
+        std::cout << "Mantysa po antilog = " << mant1 << "\n";
+        mant1 = powf(mant1, -1);
+        std::cout << "Mantysa odwrotnosc = " << mant1 << "\n";
+        mant1 *= mulMant;
+        std::cout << "Mantysa po mnozeniu razy = " << mant1 << "\n";
         if (mant1 > 2)
         {
             mant1 -= 1;

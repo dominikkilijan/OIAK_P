@@ -51,7 +51,8 @@ public:
 	void isrLNS();
 	void isrLNSIdeal();
 
-
+	int a[2] = {0,0};
+	int b = 0;
 	unsigned int logConverter(unsigned int);
 	unsigned int antilogConverter(unsigned int);
 

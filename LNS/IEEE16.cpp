@@ -24,26 +24,26 @@ void IEEE16::printNumber()
 unsigned int IEEE16::logConverter(unsigned int mantissaToLog)
 {
     unsigned int mant = mantissaToLog;
-    int a[] = {0,0};
-    int b = 0;
+    //int a[] = {0,0};
+    //int b = 0;
 
     if (mant >= 0 && mant <= 95)
     {
-        a[0] = 1;
-        a[1] = -3;
-        b = 13;
+        this->a[0] = 1;
+        this->a[1] = -3;
+        this->b = 13;
     }
     else if (mant >= 96 && mant <= 191)
     {
-        a[0] = 2;
-        a[1] = 6;
-        b = 98;
+        this->a[0] = 2;
+        this->a[1] = 6;
+        this->b = 98;
     }
     else if (mant >= 192 && mant <= 303)
     {
-        a[0] = 3;
-        a[1] = 5;
-        b = 269;
+        this->a[0] = 3;
+        this->a[1] = 5;
+        this->b = 269;
     }
     else if (mant >= 304 && mant <= 415)
     {
@@ -53,43 +53,43 @@ unsigned int IEEE16::logConverter(unsigned int mantissaToLog)
     }
     else if (mant >= 416 && mant <= 569)
     {
-        a[0] = -6;
-        a[1] = 0;
-        b = 763;
+        this->a[0] = -6;
+        this->a[1] = 0;
+        this->b = 763;
     }
     else if (mant >= 560 && mant <= 703)
     {
-        a[0] = -3;
-        a[1] = 6;
-        b = 1178;
+        this->a[0] = -3;
+        this->a[1] = 6;
+        this->b = 1178;
     }
     else if (mant >= 704 && mant <= 847)
     {
-        a[0] = -2;
-        a[1] = 4;
-        b = 1622;
+        this->a[0] = -2;
+        this->a[1] = 4;
+        this->b = 1622;
     }
     else if (mant >= 848 && mant <= 1023)
     {
-        a[0] = -2;
-        a[1] = 0;
-        b = 2055;
+        this->a[0] = -2;
+        this->a[1] = 0;
+        this->b = 2055;
     }
 
     mant = mant << 3;
-    mant = mant + b;
+    mant = mant + this->b;
     for (int i = 0; i < 2; i++)
     {
-        if (a[i] > 0)
+        if (this->a[i] > 0)
         {
             unsigned int mant2 = mantissaToLog << 3;
-            mant2 = mant2 >> a[i];
+            mant2 = mant2 >> this->a[i];
             mant += mant2;
         }
-        else if (a[i] < 0)
+        else if (this->a[i] < 0)
         {
             unsigned int mant2 = mantissaToLog << 3;
-            mant2 = mant2 >> abs(a[i]);
+            mant2 = mant2 >> abs(this->a[i]);
             mant -= mant2;
         }
     }
@@ -101,86 +101,90 @@ unsigned int IEEE16::antilogConverter(unsigned int mantissaToLog)
 {
     unsigned int mant = mantissaToLog;
     std::cout << "Poczatkowa mantysa: " << mant << "\n";
-    int a[] = {0,0};
-    int b = 0;
+    //int a[] = {0,0};
+    //int b = 0;
 
     if (mant >= 0 && mant <= 159)
     {
-        a[0] = -2;
-        a[1] = -6;
-        b = 8188;
+        this->a[0] = -2;
+        this->a[1] = -6;
+        this->b = 8188;
     }
     else if (mant >= 160 && mant <= 287)
     {
-        a[0] = -2;
-        a[1] = 4;
-        b = 8085;
+        this->a[0] = -2;
+        this->a[1] = 4;
+        this->b = 8085;
     }
     else if (mant >= 288 && mant <= 431)
     {
-        a[0] = -3;
-        a[1] = 6;
-        b = 7898;
+        this->a[0] = -3;
+        this->a[1] = 6;
+        this->b = 7898;
     }
     else if (mant >= 432 && mant <= 575)
     {
-        a[0] = -5;
-        a[1] = 0;
-        b = 7625;
+        this->a[0] = -5;
+        this->a[1] = 0;
+        this->b = 7625;
     }
     else if (mant >= 576 && mant <= 703)
     {
-        a[0] = 4;
-        a[1] = 6;
-        b = 7123;
+        this->a[0] = 4;
+        this->a[1] = 6;
+        this->b = 7123;
     }
     else if (mant >= 704 && mant <= 815)
     {
-        a[0] = 3;
-        a[1] = 5;
-        b = 6680;
+        this->a[0] = 3;
+        this->a[1] = 5;
+        this->b = 6680;
     }
     else if (mant >= 816 && mant <= 943)
     {
-        a[0] = 2;
-        a[1] = 6;
-        b = 5964;
+        this->a[0] = 2;
+        this->a[1] = 6;
+        this->b = 5964;
     }
     else if (mant >= 944 && mant <= 1023)
     {
-        a[0] = 1;
-        a[1] = -3;
-        b = 5131;
+        this->a[0] = 1;
+        this->a[1] = -3;
+        this->b = 5131;
     }
-    std::cout << "b = " << b << "\n";
+    std::cout << "b = " << this->b << "\n";
     mant = mant << 3;
     std::cout << "mant po przesunieciu = " << mant << "\n";
-    mant = mant + b;
+    mant = mant + this->b;
     std::cout << "mant plus b = " << mant << "\n";
     for (int i = 0; i < 2; i++)
     {
-        std::cout << "a[i] = " << a[i] << "\n";
-        if (a[i] > 0)
+        std::cout << "a[i] = " << this->a[i] << "\n";
+        if (this->a[i] > 0)
         {
             unsigned int mant2 = mantissaToLog << 3;
-            mant2 = mant2 >> a[i];
+            mant2 = mant2 >> this->a[i];
             std::cout << "mant2 po przesunieciu = " << mant2 << "\n";
             mant += mant2;
             std::cout << "mant po dodaniu mant2 = " << mant << "\n";
         }
-        else if (a[i] < 0)
+        else if (this->a[i] < 0)
         {
             unsigned int mant2 = mantissaToLog << 3;
-            mant2 = mant2 >> abs(a[i]);
+            mant2 = mant2 >> abs(this->a[i]);
             mant2 = ~mant2;
+            mant2 -= 4294959104; // wyzeroawanie starszych bitow
+
             std::cout << "mant2 po przesunieciu = " << mant2 << "\n";
             mant += mant2;
             std::cout << "mant po dodaniu mant2 = " << mant << "\n";
         }
     }
-    mant & 8191;
     mant = mant >> 3;
-    std::cout << "Mantysa po antilogConverter: " << (mant) << "\n";
+    IEEE16 num;
+    num.mantissa = mant;
+    mant = num.mantissa;
+    std::cout << "Mantysa po antilogConverter: " << mant << "\n";
     return mant;
 }
 //=======================================================================================================================================================================
@@ -460,8 +464,9 @@ void IEEE16::isrLNS()
         std::cout << "Mantysa mulMant: " << mant1 << "\n";*/
         IEEE16 result1(0);
         result1.mantissa = logConverter(this->mantissa);
-        long k1 = (long)result1.mantissa / -2;
+        long k1 = (long)result1.mantissa / 2;
         float mant1 = ((float)antilogConverter(k1) / 1024) + 1.0f;
+        mant1 = powf(mant1, -1);
         mant1 *= mulMant;
         if (mant1 > 2)
         {
